@@ -10,6 +10,7 @@ import { MaterialModule } from './shared/material.module';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DocumentControlComponent } from './components/document-control/document-control.component';
 import { NcrComponent } from './components/ncr/ncr.component';
+import { ProceduresComponent } from './components/procedures/procedures.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { NcrComponent } from './components/ncr/ncr.component';
     RootComponent,
     DashboardComponent,
     DocumentControlComponent,
-    NcrComponent
+    NcrComponent,
+    ProceduresComponent
   ],
   imports: [
     BrowserModule,
