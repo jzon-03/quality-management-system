@@ -11,6 +11,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DocumentControlComponent } from './components/document-control/document-control.component';
 import { NcrComponent } from './components/ncr/ncr.component';
 import { ProceduresComponent } from './components/procedures/procedures.component';
+import { TrainingComponent } from './components/training/training.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ProceduresComponent } from './components/procedures/procedures.componen
     DashboardComponent,
     DocumentControlComponent,
     NcrComponent,
-    ProceduresComponent
+    ProceduresComponent,
+    TrainingComponent
   ],
   imports: [
     BrowserModule,

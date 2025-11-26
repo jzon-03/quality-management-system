@@ -5,6 +5,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DocumentControlComponent } from './components/document-control/document-control.component';
 import { NcrComponent } from './components/ncr/ncr.component';
 import { ProceduresComponent } from './components/procedures/procedures.component';
+import { TrainingComponent } from './components/training/training.component';
 
 const routes: Routes = [
   { path: '', component: RootComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'document-control', component: DocumentControlComponent },
   { path: 'ncr', component: NcrComponent },
   { path: 'procedures', component: ProceduresComponent },
+  { path: 'training', component: TrainingComponent },
   { path: '**', redirectTo: '' }
 ];
 

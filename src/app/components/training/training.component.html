@@ -1,0 +1,405 @@
+<div class="training-container">
+  <div class="page-header">
+    <h1><mat-icon>school</mat-icon> Training & Certifications</h1>
+    <p class="page-subtitle">Manage employee training records, certifications, and competency tracking</p>
+  </div>
+
+  <!-- Action Bar -->
+  <mat-card class="action-card">
+    <div class="action-bar">
+      <div class="left-actions">
+        <button mat-raised-button color="primary">
+          <mat-icon>add</mat-icon>
+          Schedule Training
+        </button>
+        <button mat-stroked-button>
+          <mat-icon>person_add</mat-icon>
+          New Employee
+        </button>
+        <button mat-stroked-button>
+          <mat-icon>assignment</mat-icon>
+          Training Matrix
+        </button>
+        <button mat-stroked-button>
+          <mat-icon>analytics</mat-icon>
+          Competency Report
+        </button>
+      </div>
+      <div class="right-actions">
+        <button mat-icon-button matTooltip="Refresh">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Export Records">
+          <mat-icon>download</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Training Calendar">
+          <mat-icon>calendar_today</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Statistics Dashboard -->
+  <div class="stats-grid">
+    <mat-card class="stat-card completed">
+      <div class="stat-content">
+        <mat-icon class="stat-icon">check_circle</mat-icon>
+        <div class="stat-text">
+          <div class="stat-number">{{ getRecordsByStatus('Completed').length }}</div>
+          <div class="stat-label">Completed Training</div>
+        </div>
+      </div>
+    </mat-card>
+    
+    <mat-card class="stat-card scheduled">
+      <div class="stat-content">
+        <mat-icon class="stat-icon">schedule</mat-icon>
+        <div class="stat-text">
+          <div class="stat-number">{{ getRecordsByStatus('Scheduled').length }}</div>
+          <div class="stat-label">Scheduled Training</div>
+        </div>
+      </div>
+    </mat-card>
+    
+    <mat-card class="stat-card expiring">
+      <div class="stat-content">
+        <mat-icon class="stat-icon">warning</mat-icon>
+        <div class="stat-text">
+          <div class="stat-number">{{ getExpiringCount() }}</div>
+          <div class="stat-label">Expiring Soon</div>
+        </div>
+      </div>
+    </mat-card>
+    
+    <mat-card class="stat-card performance">
+      <div class="stat-content">
+        <mat-icon class="stat-icon">trending_up</mat-icon>
+        <div class="stat-text">
+          <div class="stat-number">{{ getAverageScore() }}%</div>
+          <div class="stat-label">Average Score</div>
+        </div>
+      </div>
+    </mat-card>
+    
+    <mat-card class="stat-card monthly">
+      <div class="stat-content">
+        <mat-icon class="stat-icon">calendar_month</mat-icon>
+        <div class="stat-text">
+          <div class="stat-number">{{ getCompletedThisMonth() }}</div>
+          <div class="stat-label">This Month</div>
+        </div>
+      </div>
+    </mat-card>
+    
+    <mat-card class="stat-card cost">
+      <div class="stat-content">
+        <mat-icon class="stat-icon">attach_money</mat-icon>
+        <div class="stat-text">
+          <div class="stat-number">${{ getTotalTrainingCost().toLocaleString() }}</div>
+          <div class="stat-label">Training Investment</div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Quick Actions & Alerts -->
+  <div class="alerts-section">
+    <mat-card class="alerts-card">
+      <mat-card-header>
+        <mat-card-title>Training Alerts & Actions</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="alert-items">
+          <div class="alert-item expiring" *ngIf="getExpiringCount() > 0">
+            <mat-icon>warning</mat-icon>
+            <span>{{ getExpiringCount() }} certification(s) expiring within 30 days</span>
+            <button mat-button color="warn">Review</button>
+          </div>
+          <div class="alert-item expired">
+            <mat-icon>error</mat-icon>
+            <span>{{ getRecordsByStatus('Expired').length }} training record(s) expired</span>
+            <button mat-button color="warn">Renew</button>
+          </div>
+          <div class="alert-item upcoming">
+            <mat-icon>event</mat-icon>
+            <span>{{ getRecordsByStatus('Scheduled').length }} upcoming training session(s)</span>
+            <button mat-button color="primary">Schedule</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filter-card">
+    <mat-card-header>
+      <mat-card-title>Search & Filter Training Records</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="filters-container">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search training records...</mat-label>
+          <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" 
+                 placeholder="Search by employee name, training title, or ID">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Employee</mat-label>
+          <mat-select [(ngModel)]="selectedEmployee" (ngModelChange)="applyFilters()">
+            <mat-option value="">All Employees</mat-option>
+            <mat-option *ngFor="let employee of employees" [value]="employee.id">
+              {{ employee.name }} - {{ employee.department }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Training Type</mat-label>
+          <mat-select [(ngModel)]="selectedType" (ngModelChange)="applyFilters()">
+            <mat-option value="">All Types</mat-option>
+            <mat-option *ngFor="let type of trainingTypes" [value]="type">{{ type }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilters()">
+            <mat-option value="">All Categories</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (ngModelChange)="applyFilters()">
+            <mat-option value="">All Statuses</mat-option>
+            <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Training Method</mat-label>
+          <mat-select [(ngModel)]="selectedMethod" (ngModelChange)="applyFilters()">
+            <mat-option value="">All Methods</mat-option>
+            <mat-option *ngFor="let method of methods" [value]="method">{{ method }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <button mat-button (click)="clearFilters()" class="clear-filters-btn">
+          <mat-icon>clear</mat-icon>
+          Clear All
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Training Records Table -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>Training Records ({{ filteredRecords.length }} records)</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredRecords" class="training-table">
+          <!-- Employee Column -->
+          <ng-container matColumnDef="employee">
+            <th mat-header-cell *matHeaderCellDef>Employee</th>
+            <td mat-cell *matCellDef="let record" class="employee-cell">
+              <div class="employee-info">
+                <div class="employee-name">
+                  <mat-icon>person</mat-icon>
+                  <strong>{{ record.employeeName }}</strong>
+                </div>
+                <div class="employee-id">ID: {{ record.employeeId }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Training Details Column -->
+          <ng-container matColumnDef="training">
+            <th mat-header-cell *matHeaderCellDef>Training Details</th>
+            <td mat-cell *matCellDef="let record" class="training-cell">
+              <div class="training-info">
+                <strong class="training-title">{{ record.trainingTitle }}</strong>
+                <div class="training-meta">
+                  <span class="instructor">
+                    <mat-icon>person_outline</mat-icon>
+                    {{ record.instructor }}
+                  </span>
+                  <span class="duration">
+                    <mat-icon>schedule</mat-icon>
+                    {{ record.duration }}h
+                  </span>
+                  <span class="cost">
+                    <mat-icon>attach_money</mat-icon>
+                    ${{ record.cost }}
+                  </span>
+                </div>
+                <div class="competency-areas" *ngIf="record.competencyAreas.length > 0">
+                  <mat-chip-set>
+                    <mat-chip *ngFor="let area of record.competencyAreas.slice(0, 2)" class="competency-chip">
+                      {{ area }}
+                    </mat-chip>
+                    <span *ngIf="record.competencyAreas.length > 2" class="more-areas">
+                      +{{ record.competencyAreas.length - 2 }} more
+                    </span>
+                  </mat-chip-set>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Type Column -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip-set>
+                <mat-chip>{{ record.trainingType }}</mat-chip>
+              </mat-chip-set>
+              <div class="training-method">{{ record.trainingMethod }}</div>
+            </td>
+          </ng-container>
+
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip-set>
+                <mat-chip>{{ record.category }}</mat-chip>
+              </mat-chip-set>
+              <div class="required-by">{{ record.requiredBy }}</div>
+            </td>
+          </ng-container>
+
+          <!-- Training Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Training Date</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="date-info">
+                <div class="training-date">{{ record.trainingDate | date:'MMM d, y' }}</div>
+                <div class="location">{{ record.location }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip-set>
+                <mat-chip [color]="getStatusColor(record.status)" selected>
+                  {{ record.status }}
+                </mat-chip>
+              </mat-chip-set>
+              <div class="attempts" *ngIf="record.attempts > 0">
+                Attempt {{ record.attempts }}/{{ record.maxAttempts }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Score Column -->
+          <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef>Score</th>
+            <td mat-cell *matCellDef="let record" class="score-cell">
+              <div class="score-info" *ngIf="record.score !== undefined">
+                <div class="score" [ngClass]="getScoreColor(record.score, record.passingScore)">
+                  {{ record.score }}%
+                </div>
+                <div class="passing-score">Pass: {{ record.passingScore }}%</div>
+              </div>
+              <div class="no-score" *ngIf="record.score === undefined">
+                <span *ngIf="record.status === 'Scheduled'">Not Started</span>
+                <span *ngIf="record.status === 'In Progress'">In Progress</span>
+                <span *ngIf="record.status === 'Cancelled'">Cancelled</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Expiration Column -->
+          <ng-container matColumnDef="expiration">
+            <th mat-header-cell *matHeaderCellDef>Expiration</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="expiration-info" *ngIf="record.expirationDate">
+                <div class="exp-date" 
+                     [class.expiring]="isExpiringWithin30Days(record.expirationDate)"
+                     [class.expired]="isExpired(record.expirationDate)">
+                  {{ record.expirationDate | date:'MMM d, y' }}
+                </div>
+                <div class="certificate" *ngIf="record.certificateNumber">
+                  <mat-icon>verified</mat-icon>
+                  {{ record.certificateNumber }}
+                </div>
+                <div class="expiry-warning" *ngIf="isExpiringWithin30Days(record.expirationDate)">
+                  <mat-icon>warning</mat-icon>
+                  <span *ngIf="!isExpired(record.expirationDate)">Expires Soon</span>
+                  <span *ngIf="isExpired(record.expirationDate)">Expired</span>
+                </div>
+              </div>
+              <div class="no-expiration" *ngIf="!record.expirationDate">
+                No Expiration
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let record" class="actions-cell">
+              <button mat-icon-button matTooltip="View Details" (click)="viewTrainingRecord(record)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Take Test" (click)="takeTest(record)"
+                      *ngIf="record.status === 'Scheduled' || record.status === 'In Progress'">
+                <mat-icon>quiz</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Renew" (click)="renewCertification(record)"
+                      *ngIf="record.certificateNumber && isExpiringWithin30Days(record.expirationDate)">
+                <mat-icon>autorenew</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="More Actions" [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="viewTrainingRecord(record)">
+                  <mat-icon>visibility</mat-icon>
+                  <span>View Details</span>
+                </button>
+                <button mat-menu-item *ngIf="record.status === 'Scheduled' || record.status === 'In Progress'">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit Training</span>
+                </button>
+                <button mat-menu-item *ngIf="record.certificateNumber">
+                  <mat-icon>download</mat-icon>
+                  <span>Download Certificate</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon>attach_file</mat-icon>
+                  <span>Attachments ({{ record.attachments.length }})</span>
+                </button>
+                <button mat-menu-item>
+                  <mat-icon>link</mat-icon>
+                  <span>Related Procedures</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-menu-item *ngIf="record.status === 'Scheduled'">
+                  <mat-icon>cancel</mat-icon>
+                  <span>Cancel Training</span>
+                </button>
+                <button mat-menu-item *ngIf="record.certificateNumber && isExpiringWithin30Days(record.expirationDate)">
+                  <mat-icon>autorenew</mat-icon>
+                  <span>Schedule Renewal</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+              [class.expiring-row]="row.expirationDate && isExpiringWithin30Days(row.expirationDate)"
+              [class.expired-row]="row.expirationDate && isExpired(row.expirationDate)"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
