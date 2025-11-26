@@ -15,7 +15,8 @@
         },
         "@schematics/angular:component": {
           "skipTests": true,
-          "standalone": false
+          "standalone": false,
+          "type": "component"
         },
         "@schematics/angular:directive": {
           "skipTests": true,
@@ -35,7 +36,8 @@
           "skipTests": true
         },
         "@schematics/angular:service": {
-          "skipTests": true
+          "skipTests": true,
+          "type": "service"
         }
       },
       "root": "",
@@ -54,6 +56,7 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ]
           },

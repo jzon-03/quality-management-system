@@ -1,0 +1,77 @@
+<div class="dashboard-container">
+  <h1>Quality Management Dashboard</h1>
+  
+  <div class="dashboard-cards">
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>Quality Metrics</mat-card-title>
+        <mat-card-subtitle>Current status overview</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="metric-item">
+          <span class="metric-label">Overall Quality Score</span>
+          <mat-progress-bar mode="determinate" value="85"></mat-progress-bar>
+          <span class="metric-value">85%</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-label">Compliance Rate</span>
+          <mat-progress-bar mode="determinate" value="92"></mat-progress-bar>
+          <span class="metric-value">92%</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>Recent Activities</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <mat-icon mat-list-icon>check_circle</mat-icon>
+            <div mat-line>Audit completed: Product Line A</div>
+            <div mat-line>2 hours ago</div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon mat-list-icon>warning</mat-icon>
+            <div mat-line>Quality issue detected: Batch #12345</div>
+            <div mat-line>4 hours ago</div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <mat-icon mat-list-icon>description</mat-icon>
+            <div mat-line>New document uploaded: ISO 9001 Certificate</div>
+            <div mat-line>1 day ago</div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>Quick Actions</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="action-buttons">
+          <button mat-raised-button color="primary">
+            <mat-icon>add</mat-icon>
+            New Quality Check
+          </button>
+          <button mat-raised-button color="accent">
+            <mat-icon>assignment</mat-icon>
+            Schedule Audit
+          </button>
+          <button mat-stroked-button>
+            <mat-icon>upload</mat-icon>
+            Upload Document
+          </button>
+          <button mat-stroked-button>
+            <mat-icon>analytics</mat-icon>
+            Generate Report
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

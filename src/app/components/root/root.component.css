@@ -1,0 +1,19 @@
+.welcome-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.welcome-container mat-card {
+  padding: 24px;
+}
+
+.welcome-container ul {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.welcome-container li {
+  margin: 8px 0;
+  color: var(--mat-sys-on-surface-variant);
+}
