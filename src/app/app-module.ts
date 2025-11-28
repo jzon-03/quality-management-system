@@ -26,6 +26,7 @@ import { IpiVisualChecksComponent } from './components/ipi/ipi-visual-checks/ipi
 import { IpiProcessParametersComponent } from './components/ipi/ipi-process-parameters/ipi-process-parameters.component';
 import { IpiSummaryComponent } from './components/ipi/ipi-summary/ipi-summary.component';
 import { IpiTableComponent } from './components/ipi/ipi-table/ipi-table.component';
+import { FinalInspectionComponent } from './components/final-inspection/final-inspection.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { IpiTableComponent } from './components/ipi/ipi-table/ipi-table.componen
     IpiVisualChecksComponent,
     IpiProcessParametersComponent,
     IpiSummaryComponent,
-    IpiTableComponent
+    IpiTableComponent,
+    FinalInspectionComponent
   ],
   imports: [
     BrowserModule,
