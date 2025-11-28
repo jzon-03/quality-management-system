@@ -1,0 +1,59 @@
+<div class="tab-content">
+  <div class="section-header">
+    <h3><mat-icon>calculate</mat-icon> Inspection Quantities</h3>
+  </div>
+
+  <div class="quantities-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Total Quantity</mat-label>
+      <input matInput type="number" formControlName="quantity" min="1">
+      <mat-error *ngIf="formGroup.get('quantity')?.hasError('required')">
+        Quantity is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Inspected Quantity</mat-label>
+      <input matInput type="number" formControlName="inspectedQuantity" min="0">
+      <mat-error *ngIf="formGroup.get('inspectedQuantity')?.hasError('required')">
+        Inspected Quantity is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Accepted Quantity</mat-label>
+      <input matInput type="number" formControlName="acceptedQuantity" min="0">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Rejected Quantity</mat-label>
+      <input matInput type="number" formControlName="rejectedQuantity" min="0">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Rework Quantity</mat-label>
+      <input matInput type="number" formControlName="reworkQuantity" min="0">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Disposition</mat-label>
+      <mat-select formControlName="disposition">
+        <mat-option *ngFor="let disposition of dispositions" [value]="disposition">
+          {{ disposition }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="notification-section">
+    <h4>Notifications</h4>
+    <div class="checkbox-grid">
+      <mat-checkbox formControlName="customerNotification">
+        Customer Notification Required
+      </mat-checkbox>
+      <mat-checkbox formControlName="qualityAlert">
+        Quality Alert
+      </mat-checkbox>
+    </div>
+  </div>
+</div>

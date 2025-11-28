@@ -1,0 +1,55 @@
+<!-- Header Section -->
+<div class="header-section">
+  <div class="title-row">
+    <h1>
+      <mat-icon>precision_manufacturing</mat-icon>
+      In-Process Inspection (IPI)
+    </h1>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="onToggleForm()">
+        <mat-icon>{{ showForm ? 'close' : 'add' }}</mat-icon>
+        {{ showForm ? 'Cancel' : 'New Inspection' }}
+      </button>
+    </div>
+  </div>
+  
+  <!-- Statistics Cards -->
+  <div class="stats-row">
+    <mat-card class="stat-card in-progress">
+      <mat-card-content>
+        <div class="stat-number">{{ statistics.inProgress }}</div>
+        <div class="stat-label">In Progress</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card hold">
+      <mat-card-content>
+        <div class="stat-number">{{ statistics.hold }}</div>
+        <div class="stat-label">On Hold</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card approved">
+      <mat-card-content>
+        <div class="stat-number">{{ statistics.approved }}</div>
+        <div class="stat-label">Approved</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card rejected">
+      <mat-card-content>
+        <div class="stat-number">{{ statistics.rejected }}</div>
+        <div class="stat-label">Rejected</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card rework">
+      <mat-card-content>
+        <div class="stat-number">{{ statistics.rework }}</div>
+        <div class="stat-label">Rework Required</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card yield">
+      <mat-card-content>
+        <div class="stat-number">{{ statistics.firstPassYield }}%</div>
+        <div class="stat-label">First Pass Yield</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

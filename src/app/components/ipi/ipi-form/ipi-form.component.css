@@ -1,0 +1,71 @@
+/* IPI Form Component Styles */
+
+/* Form Card */
+.form-card {
+  margin-bottom: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.form-card mat-card-header {
+  background: linear-gradient(135deg, #37474f, #546e7a);
+  color: white;
+  margin: -24px -24px 24px -24px;
+  padding: 20px 24px;
+  border-radius: 8px 8px 0 0;
+}
+
+.form-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Tab Styles */
+.ipi-tabs {
+  margin: 20px 0;
+}
+
+.ipi-tabs .mat-mdc-tab-group {
+  --mdc-tab-indicator-active-indicator-color: #1976d2;
+  --mdc-primary-navigation-tab-label-text-color: #37474f;
+  --mdc-primary-navigation-tab-active-label-text-color: #1976d2;
+}
+
+.tab-content {
+  padding: 24px 0;
+  min-height: 400px;
+}
+
+/* Card Actions */
+mat-card-actions {
+  padding: 16px 24px;
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  margin: 24px -24px -24px -24px;
+}
+
+mat-card-actions button {
+  margin-right: 12px;
+}
+
+/* Print Styles */
+@media print {
+  mat-card-actions {
+    display: none !important;
+  }
+  
+  .form-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .form-card {
+    border: 2px solid #000;
+  }
+}

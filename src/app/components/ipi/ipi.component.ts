@@ -415,7 +415,25 @@ export class IpiComponent implements OnInit {
     }
   }
 
-  updateFilteredRecords() {
+  // Add statistics property for the header component
+  get statistics() {
+    return {
+      inProgress: this.getInProgressCount(),
+      hold: this.getHoldCount(),
+      approved: this.getApprovedCount(),
+      rejected: this.getRejectedCount(),
+      rework: this.getReworkCount(),
+      firstPassYield: this.calculateFirstPassYield()
+    };
+  }
+
+  // Update the filter method to handle the new event structure
+  updateFilteredRecords(filters?: { status: string; workCenter: string }): void {
+    if (filters) {
+      this.statusFilter = filters.status;
+      this.workCenterFilter = filters.workCenter;
+    }
+
     let filtered = [...this.ipiRecords];
 
     if (this.statusFilter) {

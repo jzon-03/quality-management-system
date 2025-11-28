@@ -1,0 +1,49 @@
+<div class="tab-content">
+  <div class="section-header">
+    <h3><mat-icon>visibility</mat-icon> Visual Inspection</h3>
+    <button mat-raised-button color="primary" type="button" (click)="onAddVisualCheck()">
+      <mat-icon>add</mat-icon>
+      Add Check
+    </button>
+  </div>
+
+  <div formArrayName="visualChecks">
+    <div *ngFor="let check of visualChecksFormArray.controls; let i = index" [formGroupName]="i" class="visual-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Visual Check {{ i + 1 }}</mat-card-title>
+          <button mat-icon-button color="warn" type="button" (click)="onRemoveVisualCheck(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="third-width">
+              <mat-label>Check Point</mat-label>
+              <input matInput formControlName="checkPoint" placeholder="Surface finish">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="third-width">
+              <mat-label>Requirement</mat-label>
+              <input matInput formControlName="requirement" placeholder="No visible defects">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="third-width">
+              <mat-label>Result</mat-label>
+              <mat-select formControlName="result">
+                <mat-option *ngFor="let result of results" [value]="result">
+                  <span [style.color]="getResultColor(result)">{{ result }}</span>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notes</mat-label>
+            <input matInput formControlName="notes" placeholder="Additional observations">
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

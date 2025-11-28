@@ -16,6 +16,16 @@ import { CapaComponent } from './components/capa/capa.component';
 import { MrbComponent } from './components/mrb/mrb.component';
 import { FaiComponent } from './components/fai/fai.component';
 import { IpiComponent } from './components/ipi/ipi.component';
+import { IpiHeaderComponent } from './components/ipi/ipi-header/ipi-header.component';
+import { IpiFormComponent } from './components/ipi/ipi-form/ipi-form.component';
+import { IpiBasicInfoComponent } from './components/ipi/ipi-basic-info/ipi-basic-info.component';
+import { IpiQuantitiesComponent } from './components/ipi/ipi-quantities/ipi-quantities.component';
+import { IpiDefectsComponent } from './components/ipi/ipi-defects/ipi-defects.component';
+import { IpiMeasurementsComponent } from './components/ipi/ipi-measurements/ipi-measurements.component';
+import { IpiVisualChecksComponent } from './components/ipi/ipi-visual-checks/ipi-visual-checks.component';
+import { IpiProcessParametersComponent } from './components/ipi/ipi-process-parameters/ipi-process-parameters.component';
+import { IpiSummaryComponent } from './components/ipi/ipi-summary/ipi-summary.component';
+import { IpiTableComponent } from './components/ipi/ipi-table/ipi-table.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +39,17 @@ import { IpiComponent } from './components/ipi/ipi.component';
     CapaComponent,
     MrbComponent,
     FaiComponent,
-    IpiComponent
+    IpiComponent,
+    IpiHeaderComponent,
+    IpiFormComponent,
+    IpiBasicInfoComponent,
+    IpiQuantitiesComponent,
+    IpiDefectsComponent,
+    IpiMeasurementsComponent,
+    IpiVisualChecksComponent,
+    IpiProcessParametersComponent,
+    IpiSummaryComponent,
+    IpiTableComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-/* IPI Component Styles */
+/* Main IPI Component Styles */
 
 .ipi-container {
   padding: 20px;
@@ -13,90 +13,44 @@
   margin-bottom: 30px;
 }
 
-.title-row {
+/* Loading States */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  background: white;
   padding: 20px;
-  background: linear-gradient(135deg, #1a237e, #3949ab);
   border-radius: 8px;
-  color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.title-row h1 {
-  margin: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  font-size: 28px;
-  font-weight: 600;
-}
-
-.title-row mat-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-}
-
-/* Statistics Row */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
-  margin-bottom: 30px;
 }
 
-.stat-card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  cursor: pointer;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ipi-container {
+    padding: 16px;
+  }
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+/* Print Styles */
+@media print {
+  .ipi-container {
+    background: white;
+    padding: 0;
+  }
 }
-
-.stat-card mat-card-content {
-  text-align: center;
-  padding: 20px;
-}
-
-.stat-number {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.stat-label {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 500;
-  opacity: 0.8;
-}
-
-/* Status Color Coding */
-.stat-card.in-progress .stat-number { color: #1976d2; }
-.stat-card.in-progress { border-left: 4px solid #1976d2; }
-
-.stat-card.hold .stat-number { color: #ff9800; }
-.stat-card.hold { border-left: 4px solid #ff9800; }
-
-.stat-card.approved .stat-number { color: #388e3c; }
-.stat-card.approved { border-left: 4px solid #388e3c; }
-
-.stat-card.rejected .stat-number { color: #d32f2f; }
-.stat-card.rejected { border-left: 4px solid #d32f2f; }
-
-.stat-card.rework .stat-number { color: #7b1fa2; }
-.stat-card.rework { border-left: 4px solid #7b1fa2; }
-
-.stat-card.yield .stat-number { color: #00796b; }
-.stat-card.yield { border-left: 4px solid #00796b; }
-
-/* Form Card */
 .form-card {
   margin-bottom: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

@@ -1,0 +1,72 @@
+<div class="tab-content">
+  <div class="section-header">
+    <h3><mat-icon>bug_report</mat-icon> Defect Tracking</h3>
+    <button mat-raised-button color="primary" type="button" (click)="onAddDefect()">
+      <mat-icon>add</mat-icon>
+      Add Defect
+    </button>
+  </div>
+
+  <div formArrayName="defects">
+    <div *ngFor="let defect of defectsFormArray.controls; let i = index" [formGroupName]="i" class="defect-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Defect {{ i + 1 }}</mat-card-title>
+          <button mat-icon-button color="warn" type="button" (click)="onRemoveDefect(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Defect Type</mat-label>
+              <mat-select formControlName="defectType">
+                <mat-option *ngFor="let type of defectTypes" [value]="type">
+                  {{ type }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Severity</mat-label>
+              <mat-select formControlName="severity">
+                <mat-option *ngFor="let severity of severities" [value]="severity">
+                  <span [style.color]="getSeverityColor(severity)">{{ severity }}</span>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Quantity</mat-label>
+              <input matInput type="number" formControlName="quantity" min="1">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" placeholder="Location on part">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput rows="2" formControlName="description" 
+                     placeholder="Detailed description of the defect"></textarea>
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Probable Cause</mat-label>
+              <input matInput formControlName="cause" placeholder="Root cause">
+            </mat-form-field>
+
+            <div class="half-width checkbox-row">
+              <mat-checkbox formControlName="correctionRequired">
+                Correction Required
+              </mat-checkbox>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+<mat-card class="table-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>list_alt</mat-icon>
+      Inspection Records
+    </mat-card-title>
+    <div class="table-filters">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Filter by Status</mat-label>
+        <mat-select [(value)]="statusFilter" (selectionChange)="onFilterChange()">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let status of statuses" [value]="status">
+            {{ status }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Filter by Work Center</mat-label>
+        <mat-select [(value)]="workCenterFilter" (selectionChange)="onFilterChange()">
+          <mat-option value="">All</mat-option>
+          <mat-option *ngFor="let wc of workCenters" [value]="wc">
+            {{ wc }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="table-container">
+      <table mat-table [dataSource]="records" matSort class="ipi-table">
+        <!-- Inspection Number Column -->
+        <ng-container matColumnDef="inspectionNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Inspection #</th>
+          <td mat-cell *matCellDef="let record">
+            <strong>{{ record.inspectionNumber }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Part Number Column -->
+        <ng-container matColumnDef="partNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Part Number</th>
+          <td mat-cell *matCellDef="let record">
+            <div class="part-cell">
+              <div><strong>{{ record.partNumber }}</strong></div>
+              <div class="part-name">{{ record.partName }}</div>
+              <div class="revision">Rev {{ record.revision }}</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Operation Column -->
+        <ng-container matColumnDef="operation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Operation</th>
+          <td mat-cell *matCellDef="let record">
+            <div class="operation-cell">
+              <div>{{ record.operation }}</div>
+              <div class="sequence-text">Op {{ record.operationSequence }}</div>
+              <div class="workcenter-text">{{ record.workCenter }}</div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Quantity Column -->
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+          <td mat-cell *matCellDef="let record">
+            <div class="quantity-cell">
+              <div class="quantity-row">
+                <span class="label">Total:</span>
+                <span class="value">{{ record.quantity }}</span>
+              </div>
+              <div class="quantity-row">
+                <span class="label">Inspected:</span>
+                <span class="value">{{ record.inspectedQuantity }}</span>
+              </div>
+              <div class="quantity-row" *ngIf="record.rejectedQuantity > 0">
+                <span class="label rejected">Rejected:</span>
+                <span class="value rejected">{{ record.rejectedQuantity }}</span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let record">
+            <mat-chip [style.background-color]="getStatusColor(record.status)" 
+                     [style.color]="'#fff'">
+              {{ record.status }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Disposition Column -->
+        <ng-container matColumnDef="disposition">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Disposition</th>
+          <td mat-cell *matCellDef="let record">
+            <mat-chip [style.background-color]="getDispositionColor(record.disposition)" 
+                     [style.color]="'#fff'">
+              {{ record.disposition }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Inspector Column -->
+        <ng-container matColumnDef="inspector">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Inspector</th>
+          <td mat-cell *matCellDef="let record">
+            <div class="inspector-cell">
+              <mat-icon class="person-icon">person</mat-icon>
+              <div>
+                <div>{{ record.inspector }}</div>
+                <div class="shift-text">{{ record.shift }} Shift</div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Inspection Date Column -->
+        <ng-container matColumnDef="inspectionDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let record">
+            {{ record.inspectionDate | date:'MMM dd, yyyy' }}
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let record">
+            <div class="action-buttons">
+              <button mat-icon-button [matMenuTriggerFor]="actionMenu" matTooltip="Actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #actionMenu="matMenu">
+                <button mat-menu-item (click)="onEditRecord(record)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit Inspection</span>
+                </button>
+                <button mat-menu-item (click)="onApproveRecord(record)" 
+                        [disabled]="record.status === 'Approved'">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Approve Inspection</span>
+                </button>
+                <button mat-menu-item (click)="onRejectRecord(record)" 
+                        [disabled]="record.status === 'Rejected'">
+                  <mat-icon>cancel</mat-icon>
+                  <span>Reject Inspection</span>
+                </button>
+                <button mat-menu-item (click)="onHoldRecord(record)" 
+                        [disabled]="record.status === 'Hold'">
+                  <mat-icon>pause_circle</mat-icon>
+                  <span>Hold Inspection</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-menu-item (click)="onViewDetails(record)">
+                  <mat-icon>visibility</mat-icon>
+                  <span>View Details</span>
+                </button>
+                <button mat-menu-item (click)="onDeleteRecord(record)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete Inspection</span>
+                </button>
+              </mat-menu>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

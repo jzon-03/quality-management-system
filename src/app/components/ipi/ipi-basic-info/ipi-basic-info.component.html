@@ -1,0 +1,174 @@
+<div class="tab-content">
+  <div class="section-header">
+    <h3><mat-icon>info</mat-icon> Inspection Information</h3>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Inspection Number</mat-label>
+      <input matInput formControlName="inspectionNumber" placeholder="e.g., IPI-2024-001">
+      <mat-error *ngIf="formGroup.get('inspectionNumber')?.hasError('required')">
+        Inspection Number is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Work Order</mat-label>
+      <input matInput formControlName="workOrder" placeholder="WO-2024-001">
+      <mat-error *ngIf="formGroup.get('workOrder')?.hasError('required')">
+        Work Order is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Work Center</mat-label>
+      <mat-select formControlName="workCenter">
+        <mat-option *ngFor="let wc of workCenters" [value]="wc">
+          {{ wc }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formGroup.get('workCenter')?.hasError('required')">
+        Work Center is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="section-header">
+    <h3><mat-icon>inventory</mat-icon> Part Information</h3>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Part Number</mat-label>
+      <input matInput formControlName="partNumber" placeholder="PN-12345-A">
+      <mat-error *ngIf="formGroup.get('partNumber')?.hasError('required')">
+        Part Number is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Part Name</mat-label>
+      <input matInput formControlName="partName" placeholder="Part description">
+      <mat-error *ngIf="formGroup.get('partName')?.hasError('required')">
+        Part Name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Revision</mat-label>
+      <input matInput formControlName="revision" placeholder="A">
+      <mat-error *ngIf="formGroup.get('revision')?.hasError('required')">
+        Revision is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="half-width">
+      <mat-label>Operation</mat-label>
+      <input matInput formControlName="operation" placeholder="CNC Machining">
+      <mat-error *ngIf="formGroup.get('operation')?.hasError('required')">
+        Operation is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="quarter-width">
+      <mat-label>Op Sequence</mat-label>
+      <input matInput type="number" formControlName="operationSequence" min="1">
+      <mat-error *ngIf="formGroup.get('operationSequence')?.hasError('required')">
+        Operation Sequence is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="quarter-width">
+      <mat-label>Lot Number</mat-label>
+      <input matInput formControlName="lotNumber" placeholder="LOT-2024-001">
+    </mat-form-field>
+  </div>
+
+  <div class="section-header">
+    <h3><mat-icon>groups</mat-icon> Personnel & Equipment</h3>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Inspector</mat-label>
+      <input matInput formControlName="inspector" placeholder="Inspector name">
+      <mat-error *ngIf="formGroup.get('inspector')?.hasError('required')">
+        Inspector is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Operator</mat-label>
+      <input matInput formControlName="operator" placeholder="Operator name">
+      <mat-error *ngIf="formGroup.get('operator')?.hasError('required')">
+        Operator is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Submitted By</mat-label>
+      <input matInput formControlName="submittedBy" placeholder="Submitter name">
+      <mat-error *ngIf="formGroup.get('submittedBy')?.hasError('required')">
+        Submitter is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Machine</mat-label>
+      <input matInput formControlName="machine" placeholder="Machine ID">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Tooling</mat-label>
+      <input matInput formControlName="tooling" placeholder="Tooling used">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="third-width">
+      <mat-label>Next Operation</mat-label>
+      <input matInput formControlName="nextOperation" placeholder="Next process step">
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="quarter-width">
+      <mat-label>Inspection Date</mat-label>
+      <input matInput [matDatepicker]="inspectionPicker" formControlName="inspectionDate">
+      <mat-datepicker-toggle matSuffix [for]="inspectionPicker"></mat-datepicker-toggle>
+      <mat-datepicker #inspectionPicker></mat-datepicker>
+      <mat-error *ngIf="formGroup.get('inspectionDate')?.hasError('required')">
+        Inspection Date is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="quarter-width">
+      <mat-label>Shift</mat-label>
+      <mat-select formControlName="shift">
+        <mat-option *ngFor="let shift of shifts" [value]="shift">
+          {{ shift }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="quarter-width">
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option *ngFor="let priority of priorities" [value]="priority">
+          {{ priority }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="quarter-width">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let status of statuses" [value]="status">
+          {{ status }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

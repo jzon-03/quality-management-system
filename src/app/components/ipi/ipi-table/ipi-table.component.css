@@ -1,0 +1,249 @@
+/* IPI Table Component Styles */
+
+/* Table Card */
+.table-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.table-card mat-card-header {
+  background: linear-gradient(135deg, #424242, #616161);
+  color: white;
+  margin: -24px -24px 24px -24px;
+  padding: 20px 24px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Table Filters */
+.table-filters {
+  display: flex;
+  gap: 16px;
+}
+
+.filter-field {
+  min-width: 150px;
+}
+
+.filter-field .mat-mdc-form-field {
+  --mdc-filled-text-field-label-text-color: rgba(255, 255, 255, 0.7);
+  --mdc-filled-text-field-input-text-color: white;
+}
+
+/* Table Container */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.ipi-table {
+  width: 100%;
+  background: white;
+}
+
+.ipi-table th {
+  background: #f5f5f5;
+  color: #37474f;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 16px;
+}
+
+.ipi-table td {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+.ipi-table tr:hover {
+  background: #f8f9fa;
+}
+
+/* Table Cell Styles */
+.part-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.part-name {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+.revision {
+  font-size: 11px;
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  font-weight: 500;
+}
+
+.operation-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sequence-text {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.workcenter-text {
+  font-size: 11px;
+  background: #f3e5f5;
+  color: #7b1fa2;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  font-weight: 500;
+}
+
+.quantity-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.quantity-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-row .label {
+  font-weight: 500;
+  color: #666;
+}
+
+.quantity-row .value {
+  font-weight: 600;
+}
+
+.quantity-row.rejected .label,
+.quantity-row.rejected .value {
+  color: #d32f2f;
+}
+
+.inspector-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.person-icon {
+  color: #666;
+  font-size: 18px;
+}
+
+.shift-text {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Status and Disposition Chips */
+mat-chip {
+  font-weight: 500;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 16px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.action-buttons button {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+}
+
+.action-buttons button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Custom Scrollbar */
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table-filters {
+    flex-direction: column;
+  }
+  
+  .filter-field {
+    min-width: 100%;
+  }
+  
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .header-actions,
+  .action-buttons {
+    display: none !important;
+  }
+  
+  .table-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .table-card {
+    border: 2px solid #000;
+  }
+  
+  .ipi-table th {
+    background: #000;
+    color: #fff;
+  }
+}

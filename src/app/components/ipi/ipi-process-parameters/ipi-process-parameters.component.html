@@ -1,0 +1,61 @@
+<div class="tab-content">
+  <div class="section-header">
+    <h3><mat-icon>tune</mat-icon> Process Control</h3>
+    <button mat-raised-button color="primary" type="button" (click)="onAddProcessParameter()">
+      <mat-icon>add</mat-icon>
+      Add Parameter
+    </button>
+  </div>
+
+  <div formArrayName="processParameters">
+    <div *ngFor="let param of processParametersFormArray.controls; let i = index" [formGroupName]="i" class="parameter-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Parameter {{ i + 1 }}</mat-card-title>
+          <button mat-icon-button color="warn" type="button" (click)="onRemoveProcessParameter(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Parameter</mat-label>
+              <input matInput formControlName="parameter" placeholder="Spindle Speed">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Specification</mat-label>
+              <input matInput formControlName="specification" placeholder="3000 ± 100 RPM">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Actual Value</mat-label>
+              <input matInput formControlName="actualValue" placeholder="2980">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Unit</mat-label>
+              <input matInput formControlName="unit" placeholder="RPM">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Result</mat-label>
+              <mat-select formControlName="result">
+                <mat-option *ngFor="let result of processResults" [value]="result">
+                  <span [style.color]="getResultColor(result)">{{ result }}</span>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Notes</mat-label>
+              <input matInput formControlName="notes" placeholder="Additional notes">
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

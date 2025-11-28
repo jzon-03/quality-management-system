@@ -1,0 +1,82 @@
+<div class="tab-content">
+  <div class="section-header">
+    <h3><mat-icon>straighten</mat-icon> Dimensional Measurements</h3>
+    <button mat-raised-button color="primary" type="button" (click)="onAddMeasurement()">
+      <mat-icon>add</mat-icon>
+      Add Measurement
+    </button>
+  </div>
+
+  <div formArrayName="measurements">
+    <div *ngFor="let measurement of measurementsFormArray.controls; let i = index" [formGroupName]="i" class="measurement-card">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Measurement {{ i + 1 }}</mat-card-title>
+          <button mat-icon-button color="warn" type="button" (click)="onRemoveMeasurement(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="third-width">
+              <mat-label>Characteristic</mat-label>
+              <input matInput formControlName="characteristic" placeholder="Overall Length">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="third-width">
+              <mat-label>Specification</mat-label>
+              <input matInput formControlName="specification" placeholder="100.0 ± 0.1">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="third-width">
+              <mat-label>Tolerance</mat-label>
+              <input matInput formControlName="tolerance" placeholder="± 0.1">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Nominal Value</mat-label>
+              <input matInput type="number" formControlName="nominalValue" step="0.001">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Actual Value</mat-label>
+              <input matInput type="number" formControlName="actualValue" step="0.001">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Unit</mat-label>
+              <mat-select formControlName="unit">
+                <mat-option *ngFor="let unit of measurementUnits" [value]="unit">
+                  {{ unit }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quarter-width">
+              <mat-label>Result</mat-label>
+              <mat-select formControlName="result">
+                <mat-option *ngFor="let result of results" [value]="result">
+                  <span [style.color]="getResultColor(result)">{{ result }}</span>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Instrument</mat-label>
+              <input matInput formControlName="instrument" placeholder="CMM, Caliper, etc.">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Notes</mat-label>
+              <input matInput formControlName="notes" placeholder="Additional notes">
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
