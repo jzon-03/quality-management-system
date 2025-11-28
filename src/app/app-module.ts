@@ -14,6 +14,7 @@ import { ProceduresComponent } from './components/procedures/procedures.componen
 import { TrainingComponent } from './components/training/training.component';
 import { CapaComponent } from './components/capa/capa.component';
 import { MrbComponent } from './components/mrb/mrb.component';
+import { FaiComponent } from './components/fai/fai.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MrbComponent } from './components/mrb/mrb.component';
     ProceduresComponent,
     TrainingComponent,
     CapaComponent,
-    MrbComponent
+    MrbComponent,
+    FaiComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,766 @@
+<div class="fai-container">
+  <!-- Header -->
+  <div class="header-section">
+    <div class="title-row">
+      <h1>
+        <mat-icon>assignment</mat-icon>
+        AS9102 First Article Inspection (FAI)
+      </h1>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="toggleForm()">
+          <mat-icon>{{ showForm ? 'close' : 'add' }}</mat-icon>
+          {{ showForm ? 'Cancel' : 'New FAI' }}
+        </button>
+      </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="stats-row">
+      <mat-card class="stat-card in-progress">
+        <mat-card-content>
+          <div class="stat-number">{{ getInProgressCount() }}</div>
+          <div class="stat-label">In Progress</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card pending-review">
+        <mat-card-content>
+          <div class="stat-number">{{ getPendingReviewCount() }}</div>
+          <div class="stat-label">Pending Review</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card approved">
+        <mat-card-content>
+          <div class="stat-number">{{ getApprovedCount() }}</div>
+          <div class="stat-label">Approved</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card rejected">
+        <mat-card-content>
+          <div class="stat-number">{{ getRejectedCount() }}</div>
+          <div class="stat-label">Rejected</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card overdue">
+        <mat-card-content>
+          <div class="stat-number">{{ getOverdueCount() }}</div>
+          <div class="stat-label">Overdue</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- FAI Form -->
+  <mat-card class="form-card" *ngIf="showForm">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+        {{ isEditMode ? 'Edit FAI Record' : 'Create New FAI Record' }}
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="faiForm" (ngSubmit)="onSubmit()">
+        <!-- Tab Navigation -->
+        <mat-tab-group [(selectedIndex)]="activeTabIndex" class="fai-tabs">
+          <!-- Basic Information Tab -->
+          <mat-tab label="Basic Info">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3><mat-icon>info</mat-icon> Basic Information</h3>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>FAI Number</mat-label>
+                  <input matInput formControlName="faiNumber" placeholder="e.g., FAI-2024-001">
+                  <mat-error *ngIf="faiForm.get('faiNumber')?.hasError('required')">
+                    FAI Number is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Work Order</mat-label>
+                  <input matInput formControlName="workOrder" placeholder="WO-2024-001">
+                  <mat-error *ngIf="faiForm.get('workOrder')?.hasError('required')">
+                    Work Order is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Customer</mat-label>
+                  <input matInput formControlName="customer" placeholder="Customer name">
+                  <mat-error *ngIf="faiForm.get('customer')?.hasError('required')">
+                    Customer is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Part Number</mat-label>
+                  <input matInput formControlName="partNumber" placeholder="PN-12345-A">
+                  <mat-error *ngIf="faiForm.get('partNumber')?.hasError('required')">
+                    Part Number is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Part Name</mat-label>
+                  <input matInput formControlName="partName" placeholder="Part description">
+                  <mat-error *ngIf="faiForm.get('partName')?.hasError('required')">
+                    Part Name is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Revision</mat-label>
+                  <input matInput formControlName="revision" placeholder="A">
+                  <mat-error *ngIf="faiForm.get('revision')?.hasError('required')">
+                    Revision is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Lot Number</mat-label>
+                  <input matInput formControlName="lotNumber" placeholder="LOT-2024-001">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Serial Number</mat-label>
+                  <input matInput formControlName="serialNumber" placeholder="SN-001">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Program</mat-label>
+                  <input matInput formControlName="program" placeholder="Program name">
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Drawing Number</mat-label>
+                  <input matInput formControlName="drawingNumber" placeholder="DWG-12345">
+                  <mat-error *ngIf="faiForm.get('drawingNumber')?.hasError('required')">
+                    Drawing Number is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Drawing Revision</mat-label>
+                  <input matInput formControlName="drawingRevision" placeholder="A">
+                  <mat-error *ngIf="faiForm.get('drawingRevision')?.hasError('required')">
+                    Drawing Revision is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Inspector Name</mat-label>
+                  <input matInput formControlName="inspectorName" placeholder="Inspector name">
+                  <mat-error *ngIf="faiForm.get('inspectorName')?.hasError('required')">
+                    Inspector Name is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Reason</mat-label>
+                  <mat-select formControlName="reason">
+                    <mat-option *ngFor="let reason of reasons" [value]="reason">
+                      {{ reason }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="faiForm.get('reason')?.hasError('required')">
+                    Reason is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Production Method</mat-label>
+                  <mat-select formControlName="productionMethod">
+                    <mat-option *ngFor="let method of productionMethods" [value]="method">
+                      {{ method }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Status</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option *ngFor="let status of statuses" [value]="status">
+                      {{ status }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="quarter-width">
+                  <mat-label>Priority</mat-label>
+                  <mat-select formControlName="priority">
+                    <mat-option *ngFor="let priority of priorities" [value]="priority">
+                      {{ priority }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Inspection Date</mat-label>
+                  <input matInput [matDatepicker]="inspectionPicker" formControlName="inspectionDate">
+                  <mat-datepicker-toggle matSuffix [for]="inspectionPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #inspectionPicker></mat-datepicker>
+                  <mat-error *ngIf="faiForm.get('inspectionDate')?.hasError('required')">
+                    Inspection Date is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Due Date</mat-label>
+                  <input matInput [matDatepicker]="duePicker" formControlName="dueDate">
+                  <mat-datepicker-toggle matSuffix [for]="duePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #duePicker></mat-datepicker>
+                  <mat-error *ngIf="faiForm.get('dueDate')?.hasError('required')">
+                    Due Date is required
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="third-width">
+                  <mat-label>Submitted By</mat-label>
+                  <input matInput formControlName="submittedBy" placeholder="Submitter name">
+                  <mat-error *ngIf="faiForm.get('submittedBy')?.hasError('required')">
+                    Submitter is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Manufacturing Info Tab -->
+          <mat-tab label="Manufacturing">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3><mat-icon>precision_manufacturing</mat-icon> Manufacturing Information</h3>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Manufacturing Process</mat-label>
+                <textarea matInput rows="2" formControlName="manufacturingProcess" 
+                         placeholder="Describe the manufacturing process"></textarea>
+                <mat-error *ngIf="faiForm.get('manufacturingProcess')?.hasError('required')">
+                  Manufacturing Process is required
+                </mat-error>
+              </mat-form-field>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Tooling Used</mat-label>
+                  <textarea matInput rows="2" formControlName="toolingUsed" 
+                           placeholder="List tooling and fixtures used"></textarea>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Equipment Used</mat-label>
+                  <textarea matInput rows="2" formControlName="equipmentUsed" 
+                           placeholder="List equipment and machines used"></textarea>
+                </mat-form-field>
+              </div>
+
+              <div class="checkbox-section">
+                <h4>Documentation Requirements</h4>
+                <div class="checkbox-grid">
+                  <mat-checkbox formControlName="materialCertification">
+                    Material Certification Available
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="processDocumentation">
+                    Process Documentation Complete
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="calibrationRecords">
+                    Calibration Records Current
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="customerApproval">
+                    Customer Approval Required
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Dimensions Tab -->
+          <mat-tab label="Dimensions">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3><mat-icon>straighten</mat-icon> Dimensional Inspection</h3>
+                <button mat-raised-button color="primary" type="button" (click)="addDimension()">
+                  <mat-icon>add</mat-icon>
+                  Add Dimension
+                </button>
+              </div>
+
+              <div formArrayName="dimensions">
+                <div *ngFor="let dimension of dimensions.controls; let i = index" [formGroupName]="i" class="dimension-card">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Dimension {{ i + 1 }}</mat-card-title>
+                      <button mat-icon-button color="warn" type="button" (click)="removeDimension(i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Characteristic</mat-label>
+                          <input matInput formControlName="characteristic" placeholder="Overall Length">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Specification</mat-label>
+                          <input matInput formControlName="specification" placeholder="100.0 ± 0.1">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Tolerance</mat-label>
+                          <input matInput formControlName="tolerance" placeholder="± 0.1">
+                        </mat-form-field>
+                      </div>
+
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="quarter-width">
+                          <mat-label>Actual Value</mat-label>
+                          <input matInput type="number" formControlName="actualValue" step="0.001">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="quarter-width">
+                          <mat-label>Unit</mat-label>
+                          <mat-select formControlName="unit">
+                            <mat-option *ngFor="let unit of measurementUnits" [value]="unit">
+                              {{ unit }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="quarter-width">
+                          <mat-label>Method</mat-label>
+                          <input matInput formControlName="method" placeholder="CMM, Caliper, etc.">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="quarter-width">
+                          <mat-label>Result</mat-label>
+                          <mat-select formControlName="result">
+                            <mat-option *ngFor="let result of testResults" [value]="result">
+                              <span [style.color]="getResultColor(result)">{{ result }}</span>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Notes</mat-label>
+                        <input matInput formControlName="notes" placeholder="Additional notes">
+                      </mat-form-field>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Functional Tests Tab -->
+          <mat-tab label="Functional Tests">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3><mat-icon>science</mat-icon> Functional Testing</h3>
+                <button mat-raised-button color="primary" type="button" (click)="addFunctionalTest()">
+                  <mat-icon>add</mat-icon>
+                  Add Test
+                </button>
+              </div>
+
+              <div formArrayName="functionalTests">
+                <div *ngFor="let test of functionalTests.controls; let i = index" [formGroupName]="i" class="test-card">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Functional Test {{ i + 1 }}</mat-card-title>
+                      <button mat-icon-button color="warn" type="button" (click)="removeFunctionalTest(i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Test Name</mat-label>
+                          <input matInput formControlName="testName" placeholder="Pressure Test">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Specification</mat-label>
+                          <input matInput formControlName="specification" placeholder="1000 PSI minimum">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Procedure</mat-label>
+                          <input matInput formControlName="procedure" placeholder="PR-TEST-001">
+                        </mat-form-field>
+                      </div>
+
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Actual Result</mat-label>
+                          <input matInput formControlName="actualResult" placeholder="1150 PSI">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Equipment</mat-label>
+                          <input matInput formControlName="equipment" placeholder="Test equipment used">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Result</mat-label>
+                          <mat-select formControlName="result">
+                            <mat-option *ngFor="let result of testResults" [value]="result">
+                              <span [style.color]="getResultColor(result)">{{ result }}</span>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Notes</mat-label>
+                        <input matInput formControlName="notes" placeholder="Additional notes">
+                      </mat-form-field>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Material Tests Tab -->
+          <mat-tab label="Material Tests">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3><mat-icon>biotech</mat-icon> Material Testing</h3>
+                <button mat-raised-button color="primary" type="button" (click)="addMaterialTest()">
+                  <mat-icon>add</mat-icon>
+                  Add Test
+                </button>
+              </div>
+
+              <div formArrayName="materialTests">
+                <div *ngFor="let test of materialTests.controls; let i = index" [formGroupName]="i" class="test-card">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Material Test {{ i + 1 }}</mat-card-title>
+                      <button mat-icon-button color="warn" type="button" (click)="removeMaterialTest(i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Test Name</mat-label>
+                          <input matInput formControlName="testName" placeholder="Hardness Test">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Specification</mat-label>
+                          <input matInput formControlName="specification" placeholder="HRC 45-50">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Procedure</mat-label>
+                          <input matInput formControlName="procedure" placeholder="ASTM E18">
+                        </mat-form-field>
+                      </div>
+
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Actual Result</mat-label>
+                          <input matInput formControlName="actualResult" placeholder="HRC 47">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Equipment</mat-label>
+                          <input matInput formControlName="equipment" placeholder="Test equipment used">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Result</mat-label>
+                          <mat-select formControlName="result">
+                            <mat-option *ngFor="let result of testResults" [value]="result">
+                              <span [style.color]="getResultColor(result)">{{ result }}</span>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Notes</mat-label>
+                        <input matInput formControlName="notes" placeholder="Additional notes">
+                      </mat-form-field>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Surface Finish Tab -->
+          <mat-tab label="Surface Finish">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3><mat-icon>texture</mat-icon> Surface Finish</h3>
+                <button mat-raised-button color="primary" type="button" (click)="addSurfaceFinish()">
+                  <mat-icon>add</mat-icon>
+                  Add Surface
+                </button>
+              </div>
+
+              <div formArrayName="surfaceFinish">
+                <div *ngFor="let surface of surfaceFinish.controls; let i = index" [formGroupName]="i" class="surface-card">
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>Surface {{ i + 1 }}</mat-card-title>
+                      <button mat-icon-button color="warn" type="button" (click)="removeSurfaceFinish(i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Surface</mat-label>
+                          <input matInput formControlName="surface" placeholder="Machined Surface A">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Specification</mat-label>
+                          <input matInput formControlName="specification" placeholder="3.2 Ra max">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="third-width">
+                          <mat-label>Result</mat-label>
+                          <mat-select formControlName="result">
+                            <mat-option *ngFor="let result of testResults" [value]="result">
+                              <span [style.color]="getResultColor(result)">{{ result }}</span>
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="form-row">
+                        <mat-form-field appearance="outline" class="half-width">
+                          <mat-label>Actual Value</mat-label>
+                          <input matInput type="number" formControlName="actualValue" step="0.1">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="half-width">
+                          <mat-label>Unit</mat-label>
+                          <mat-select formControlName="unit">
+                            <mat-option *ngFor="let unit of measurementUnits" [value]="unit">
+                              {{ unit }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Notes</mat-label>
+                        <input matInput formControlName="notes" placeholder="Additional notes">
+                      </mat-form-field>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Summary Tab -->
+          <mat-tab label="Summary">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3><mat-icon>summarize</mat-icon> Summary & Disposition</h3>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Disposition</mat-label>
+                  <mat-select formControlName="disposition">
+                    <mat-option *ngFor="let disposition of dispositions" [value]="disposition">
+                      {{ disposition }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <div class="half-width result-summary">
+                  <div class="overall-result">
+                    <span class="result-label">Overall Result:</span>
+                    <span class="result-value" [style.color]="getResultColor(calculateOverallResult())">
+                      {{ calculateOverallResult() }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Notes</mat-label>
+                <textarea matInput rows="4" formControlName="notes" 
+                         placeholder="Additional notes, observations, or recommendations"></textarea>
+              </mat-form-field>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+
+        <mat-card-actions align="end">
+          <button mat-button type="button" (click)="resetForm()">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!faiForm.valid">
+            <mat-icon>{{ isEditMode ? 'update' : 'save' }}</mat-icon>
+            {{ isEditMode ? 'Update FAI' : 'Submit FAI' }}
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- FAI Records Table -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>list_alt</mat-icon>
+        FAI Records
+      </mat-card-title>
+      <div class="table-filters">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filter by Status</mat-label>
+          <mat-select [(value)]="statusFilter" (selectionChange)="updateFilteredRecords()">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let status of statuses" [value]="status">
+              {{ status }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredRecords" matSort class="fai-table">
+          <!-- FAI Number Column -->
+          <ng-container matColumnDef="faiNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>FAI #</th>
+            <td mat-cell *matCellDef="let record">
+              <strong>{{ record.faiNumber }}</strong>
+            </td>
+          </ng-container>
+
+          <!-- Part Number Column -->
+          <ng-container matColumnDef="partNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Part Number</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="part-cell">
+                <div><strong>{{ record.partNumber }}</strong></div>
+                <div class="part-name">{{ record.partName }}</div>
+                <div class="revision">Rev {{ record.revision }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Customer Column -->
+          <ng-container matColumnDef="customer">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="customer-cell">
+                <div>{{ record.customer }}</div>
+                <div class="program-text" *ngIf="record.program">{{ record.program }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Reason Column -->
+          <ng-container matColumnDef="reason">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Reason</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip class="reason-chip">
+                {{ record.reason }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip [style.background-color]="getStatusColor(record.status)" 
+                       [style.color]="'#fff'">
+                {{ record.status }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Disposition Column -->
+          <ng-container matColumnDef="disposition">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Disposition</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip [style.background-color]="getDispositionColor(record.disposition)" 
+                       [style.color]="'#fff'">
+                {{ record.disposition }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Due Date Column -->
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="date-cell" [class.overdue]="isOverdue(record.dueDate, record.status)">
+                <mat-icon *ngIf="isOverdue(record.dueDate, record.status)" class="warning-icon">
+                  warning
+                </mat-icon>
+                {{ record.dueDate | date:'MMM dd, yyyy' }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="action-buttons">
+                <button mat-icon-button color="primary" (click)="editRecord(record)" 
+                        matTooltip="Edit FAI">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="accent" (click)="approveRecord(record)" 
+                        matTooltip="Approve FAI" 
+                        [disabled]="record.status === 'Approved'">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="rejectRecord(record)" 
+                        matTooltip="Reject FAI"
+                        [disabled]="record.status === 'Rejected'">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+                <button mat-icon-button (click)="viewDetails(record)" 
+                        matTooltip="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteRecord(record)" 
+                        matTooltip="Delete FAI">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
