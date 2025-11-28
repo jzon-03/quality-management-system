@@ -11,6 +11,8 @@ import { MrbComponent } from './components/mrb/mrb.component';
 import { FaiComponent } from './components/fai/fai.component';
 import { IpiComponent } from './components/ipi/ipi.component';
 import { FinalInspectionComponent } from './components/final-inspection/final-inspection.component';
+import { IncomingMaterialInspectionComponent } from './components/incoming-material-inspection/incoming-material-inspection.component';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 
 const routes: Routes = [
   { path: '', component: RootComponent },
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path: 'fai', component: FaiComponent },
   { path: 'ipi', component: IpiComponent },
   { path: 'final-inspection', component: FinalInspectionComponent },
+  { path: 'incoming', component: IncomingMaterialInspectionComponent },
+  { path: 'settings', component: UserSettingsComponent },
   { path: '**', redirectTo: '' }
 ];
 

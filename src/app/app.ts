@@ -40,18 +40,18 @@ export class App implements OnInit, OnDestroy {
     { id: 9, name: "In-Process Inspection", route: "/ipi", icon: "precision_manufacturing" },
     { id: 10, name: "Final Inspection", route: "/final-inspection", icon: "task_alt" },
     { id: 11, name: "Incoming Material Inspection", route: "/incoming", icon: "inventory_2" },
-    { id: 12, name: "Gauge Calibration / MTE", route: "/calibration", icon: "tune" },
+    // { id: 12, name: "Gauge Calibration / MTE", route: "/calibration", icon: "tune" },
 
-    { id: 13, name: "Tooling & Fixture Management", route: "/tooling", icon: "construction" },
-    { id: 14, name: "Material Lot Traceability", route: "/traceability", icon: "qr_code_2" },
-    { id: 15, name: "Process Control Plans", route: "/control-plans", icon: "assignment_turned_in" },
+    // { id: 13, name: "Tooling & Fixture Management", route: "/tooling", icon: "construction" },
+    // { id: 14, name: "Material Lot Traceability", route: "/traceability", icon: "qr_code_2" },
+    // { id: 15, name: "Process Control Plans", route: "/control-plans", icon: "assignment_turned_in" },
 
-    { id: 16, name: "Supplier Quality", route: "/suppliers", icon: "handshake" },
-    { id: 17, name: "Customer Complaints", route: "/complaints", icon: "support_agent" },
+    // { id: 16, name: "Supplier Quality", route: "/suppliers", icon: "handshake" },
+    // { id: 17, name: "Customer Complaints", route: "/complaints", icon: "support_agent" },
 
-    { id: 18, name: "Internal & Supplier Audits", route: "/audits", icon: "fact_check" },
-    { id: 19, name: "Risk Management (FMEA)", route: "/fmea", icon: "assessment" },
-    { id: 20, name: "KPIs & Reports", route: "/reports", icon: "insights" },
+    // { id: 18, name: "Internal & Supplier Audits", route: "/audits", icon: "fact_check" },
+    // { id: 19, name: "Risk Management (FMEA)", route: "/fmea", icon: "assessment" },
+    // { id: 20, name: "KPIs & Reports", route: "/reports", icon: "insights" },
 
     { id: 21, name: "User & Permission Settings", route: "/settings", icon: "settings" }
   ];
