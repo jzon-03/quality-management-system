@@ -1,7 +1,7 @@
 import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
@@ -12,6 +12,8 @@ import { DocumentControlComponent } from './components/document-control/document
 import { NcrComponent } from './components/ncr/ncr.component';
 import { ProceduresComponent } from './components/procedures/procedures.component';
 import { TrainingComponent } from './components/training/training.component';
+import { CapaComponent } from './components/capa/capa.component';
+import { MrbComponent } from './components/mrb/mrb.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +23,15 @@ import { TrainingComponent } from './components/training/training.component';
     DocumentControlComponent,
     NcrComponent,
     ProceduresComponent,
-    TrainingComponent
+    TrainingComponent,
+    CapaComponent,
+    MrbComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     MaterialModule
   ],

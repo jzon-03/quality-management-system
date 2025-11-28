@@ -6,6 +6,8 @@ import { DocumentControlComponent } from './components/document-control/document
 import { NcrComponent } from './components/ncr/ncr.component';
 import { ProceduresComponent } from './components/procedures/procedures.component';
 import { TrainingComponent } from './components/training/training.component';
+import { CapaComponent } from './components/capa/capa.component';
+import { MrbComponent } from './components/mrb/mrb.component';
 
 const routes: Routes = [
   { path: '', component: RootComponent },
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'ncr', component: NcrComponent },
   { path: 'procedures', component: ProceduresComponent },
   { path: 'training', component: TrainingComponent },
+  { path: 'capa', component: CapaComponent },
+  { path: 'mrb', component: MrbComponent },
   { path: '**', redirectTo: '' }
 ];
 

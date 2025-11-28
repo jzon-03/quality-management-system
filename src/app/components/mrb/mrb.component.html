@@ -1,0 +1,463 @@
+<div class="mrb-container">
+  <!-- Header -->
+  <div class="header-section">
+    <div class="title-row">
+      <h1>
+        <mat-icon>gavel</mat-icon>
+        Material Review Board (MRB) / Deviation Management
+      </h1>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="toggleForm()">
+          <mat-icon>{{ showForm ? 'close' : 'add' }}</mat-icon>
+          {{ showForm ? 'Cancel' : 'New MRB Request' }}
+        </button>
+      </div>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="stats-row">
+      <mat-card class="stat-card submitted">
+        <mat-card-content>
+          <div class="stat-number">{{ getSubmittedCount() }}</div>
+          <div class="stat-label">Submitted</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card under-review">
+        <mat-card-content>
+          <div class="stat-number">{{ getUnderReviewCount() }}</div>
+          <div class="stat-label">Under Review</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card board-review">
+        <mat-card-content>
+          <div class="stat-number">{{ getBoardReviewCount() }}</div>
+          <div class="stat-label">Board Review</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card approved">
+        <mat-card-content>
+          <div class="stat-number">{{ getApprovedCount() }}</div>
+          <div class="stat-label">Approved</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card overdue">
+        <mat-card-content>
+          <div class="stat-number">{{ getOverdueCount() }}</div>
+          <div class="stat-label">Overdue</div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="stat-card cost">
+        <mat-card-content>
+          <div class="stat-number">${{ getTotalEstimatedCost() | number:'1.0-0' }}</div>
+          <div class="stat-label">Est. Cost Impact</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- MRB Form -->
+  <mat-card class="form-card" *ngIf="showForm">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>{{ isEditMode ? 'edit' : 'add_circle' }}</mat-icon>
+        {{ isEditMode ? 'Edit MRB Request' : 'Create New MRB Request' }}
+      </mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="mrbForm" (ngSubmit)="onSubmit()">
+        <!-- Basic Information -->
+        <div class="section-header">
+          <h3><mat-icon>info</mat-icon> Basic Information</h3>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="third-width">
+            <mat-label>MRB Number</mat-label>
+            <input matInput formControlName="mrbNumber" placeholder="e.g., MRB-2024-001">
+            <mat-error *ngIf="mrbForm.get('mrbNumber')?.hasError('required')">
+              MRB Number is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="third-width">
+            <mat-label>Submitted By</mat-label>
+            <input matInput formControlName="submittedBy" placeholder="Employee name">
+            <mat-error *ngIf="mrbForm.get('submittedBy')?.hasError('required')">
+              Submitter name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="third-width">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="duePicker" formControlName="dueDate">
+            <mat-datepicker-toggle matSuffix [for]="duePicker"></mat-datepicker-toggle>
+            <mat-datepicker #duePicker></mat-datepicker>
+            <mat-error *ngIf="mrbForm.get('dueDate')?.hasError('required')">
+              Due date is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" placeholder="Brief description of the issue">
+          <mat-error *ngIf="mrbForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+          <mat-error *ngIf="mrbForm.get('title')?.hasError('minlength')">
+            Title must be at least 5 characters long
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput rows="3" formControlName="description" 
+                   placeholder="Detailed description of the non-conformance or deviation"></textarea>
+          <mat-error *ngIf="mrbForm.get('description')?.hasError('required')">
+            Description is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Part Information -->
+        <div class="section-header">
+          <h3><mat-icon>inventory</mat-icon> Part Information</h3>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="third-width">
+            <mat-label>Part Number</mat-label>
+            <input matInput formControlName="partNumber" placeholder="PN-12345">
+            <mat-error *ngIf="mrbForm.get('partNumber')?.hasError('required')">
+              Part number is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="third-width">
+            <mat-label>Lot Number</mat-label>
+            <input matInput formControlName="lotNumber" placeholder="LOT-2024-001">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="third-width">
+            <mat-label>Supplier</mat-label>
+            <input matInput formControlName="supplier" placeholder="Supplier name">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="quarter-width">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" formControlName="quantity" min="1">
+            <mat-error *ngIf="mrbForm.get('quantity')?.hasError('required')">
+              Quantity is required
+            </mat-error>
+            <mat-error *ngIf="mrbForm.get('quantity')?.hasError('min')">
+              Quantity must be at least 1
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="quarter-width">
+            <mat-label>Unit of Measure</mat-label>
+            <mat-select formControlName="unitOfMeasure">
+              <mat-option *ngFor="let unit of unitsOfMeasure" [value]="unit">
+                {{ unit }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Customer Order</mat-label>
+            <input matInput formControlName="customerOrder" placeholder="CO-2024-001">
+          </mat-form-field>
+        </div>
+
+        <!-- Deviation Details -->
+        <div class="section-header">
+          <h3><mat-icon>report_problem</mat-icon> Deviation Details</h3>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Deviation Description</mat-label>
+          <textarea matInput rows="3" formControlName="deviation" 
+                   placeholder="Detailed description of the deviation from specification"></textarea>
+          <mat-error *ngIf="mrbForm.get('deviation')?.hasError('required')">
+            Deviation description is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="quarter-width">
+            <mat-label>Deviation Type</mat-label>
+            <mat-select formControlName="deviationType">
+              <mat-option *ngFor="let type of deviationTypes" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="mrbForm.get('deviationType')?.hasError('required')">
+              Deviation type is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="quarter-width">
+            <mat-label>Severity</mat-label>
+            <mat-select formControlName="severity">
+              <mat-option *ngFor="let severity of severities" [value]="severity">
+                {{ severity }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="quarter-width">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option *ngFor="let priority of priorities" [value]="priority">
+                {{ priority }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="quarter-width">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statuses" [value]="status">
+                {{ status }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Disposition</mat-label>
+            <mat-select formControlName="disposition">
+              <mat-option *ngFor="let disposition of dispositions" [value]="disposition">
+                {{ disposition }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="half-width checkbox-row">
+            <mat-checkbox formControlName="customerNotification">
+              Customer Notification Required
+            </mat-checkbox>
+            <mat-checkbox formControlName="customerApproval">
+              Customer Approval Required
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <!-- Cost Impact -->
+        <div class="section-header">
+          <h3><mat-icon>attach_money</mat-icon> Cost Impact</h3>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Estimated Cost</mat-label>
+            <input matInput type="number" formControlName="estimatedCost" min="0" step="0.01">
+            <span matPrefix>$</span>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Actual Cost</mat-label>
+            <input matInput type="number" formControlName="actualCost" min="0" step="0.01">
+            <span matPrefix>$</span>
+          </mat-form-field>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="section-header">
+          <h3><mat-icon>description</mat-icon> Additional Information</h3>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Justification</mat-label>
+          <textarea matInput rows="2" formControlName="justification" 
+                   placeholder="Justification for proposed disposition"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Quality Impact Assessment</mat-label>
+          <textarea matInput rows="2" formControlName="qualityImpact" 
+                   placeholder="Assessment of impact on quality and functionality"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Corrective Action</mat-label>
+          <textarea matInput rows="2" formControlName="correctiveAction" 
+                   placeholder="Actions to prevent recurrence"></textarea>
+        </mat-form-field>
+
+        <mat-card-actions align="end">
+          <button mat-button type="button" (click)="resetForm()">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!mrbForm.valid">
+            <mat-icon>{{ isEditMode ? 'update' : 'save' }}</mat-icon>
+            {{ isEditMode ? 'Update MRB' : 'Submit MRB' }}
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- MRB Records Table -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>list_alt</mat-icon>
+        MRB Records
+      </mat-card-title>
+      <div class="table-filters">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filter by Status</mat-label>
+          <mat-select [(value)]="statusFilter" (selectionChange)="updateFilteredRecords()">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let status of statuses" [value]="status">
+              {{ status }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filter by Disposition</mat-label>
+          <mat-select [(value)]="dispositionFilter" (selectionChange)="updateFilteredRecords()">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let disposition of dispositions" [value]="disposition">
+              {{ disposition }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredRecords" matSort class="mrb-table">
+          <!-- MRB Number Column -->
+          <ng-container matColumnDef="mrbNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>MRB #</th>
+            <td mat-cell *matCellDef="let record">
+              <strong>{{ record.mrbNumber }}</strong>
+            </td>
+          </ng-container>
+
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="title-cell">
+                <div class="title-text">{{ record.title }}</div>
+                <div class="subtitle-text">{{ record.deviationType }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Part Number Column -->
+          <ng-container matColumnDef="partNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Part Number</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="part-cell">
+                <div><strong>{{ record.partNumber }}</strong></div>
+                <div class="lot-text" *ngIf="record.lotNumber">{{ record.lotNumber }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Quantity Column -->
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="quantity-cell">
+                <span class="quantity-number">{{ record.quantity }}</span>
+                <span class="unit-text">{{ record.unitOfMeasure }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Severity Column -->
+          <ng-container matColumnDef="severity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Severity</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip [style.background-color]="getSeverityColor(record.severity)" 
+                       [style.color]="'#fff'">
+                {{ record.severity }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip [style.background-color]="getStatusColor(record.status)" 
+                       [style.color]="'#fff'">
+                {{ record.status }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Disposition Column -->
+          <ng-container matColumnDef="disposition">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Disposition</th>
+            <td mat-cell *matCellDef="let record">
+              <mat-chip [style.background-color]="getDispositionColor(record.disposition)" 
+                       [style.color]="'#fff'">
+                {{ record.disposition }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Due Date Column -->
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="date-cell" [class.overdue]="isOverdue(record.dueDate, record.status)">
+                <mat-icon *ngIf="isOverdue(record.dueDate, record.status)" class="warning-icon">
+                  warning
+                </mat-icon>
+                {{ record.dueDate | date:'MMM dd, yyyy' }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let record">
+              <div class="action-buttons">
+                <button mat-icon-button color="primary" (click)="editRecord(record)" 
+                        matTooltip="Edit MRB">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="accent" (click)="approveRecord(record)" 
+                        matTooltip="Approve MRB" 
+                        [disabled]="record.status === 'Approved'">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="rejectRecord(record)" 
+                        matTooltip="Reject MRB"
+                        [disabled]="record.status === 'Rejected'">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+                <button mat-icon-button (click)="viewDetails(record)" 
+                        matTooltip="View Details">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteRecord(record)" 
+                        matTooltip="Delete MRB">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
