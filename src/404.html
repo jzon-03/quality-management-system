@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quality Management System</title>
+  <script type="text/javascript">
+    // Single Page Apps for GitHub Pages
+    // MIT License
+    // https://github.com/rafgraph/spa-github-pages
+    // This script takes the current url and converts the path and query
+    // string into just a query string, and then redirects the browser
+    // to the new url with only a query string and hash fragment,
+    // e.g., https://www.foo.tld/one/two?a=b&c=d#qwe, becomes
+    // https://www.foo.tld/?/one/two&a=b~and~c=d#qwe
+    // Note: this 404.html file must be at least 512 bytes for it to work
+    // with Internet Explorer (it is currently > 512 bytes)
+
+    // If you're creating a Project Pages site and NOT using a custom domain,
+    // then set pathSegmentsToKeep to 1 (enterprise users may need to set it to > 1).
+    // This way the code will only replace the route part of the path, and not
+    // the real directory in which the app resides, for example:
+    // https://username.github.io/repo-name/one/two?a=b&c=d#qwe becomes
+    // https://username.github.io/repo-name/?/one/two&a=b~and~c=d#qwe
+    // Otherwise, leave pathSegmentsToKeep as 0.
+    var pathSegmentsToKeep = 0;
+
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+      l.hash
+    );
+  </script>
+</head>
+<body>
+  <div style="
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #673ab7, #9c27b0);
+    color: white;
+    text-align: center;
+  ">
+    <div style="margin-bottom: 2rem;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z"/>
+      </svg>
+    </div>
+    <h1 style="margin: 0 0 1rem 0; font-size: 2rem; font-weight: 600;">Quality Management System</h1>
+    <p style="margin: 0; opacity: 0.9; font-size: 1.1rem;">Redirecting you to the application...</p>
+    <div style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+      If you are not redirected automatically, <a href="/" style="color: #fff; text-decoration: underline;">click here</a>.
+    </div>
+  </div>
+</body>
+</html>

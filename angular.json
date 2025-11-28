@@ -53,6 +53,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "CNAME",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "404.html",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [

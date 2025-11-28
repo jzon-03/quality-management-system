@@ -1,6 +1,39 @@
-# QualityManagementSystem
+# Quality Management System (QMS)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.1.
+A comprehensive Quality Management System built with Angular 18+ and Material Design, featuring inspection workflows, user management, and compliance tracking.
+
+## 🌐 Live Deployment
+
+**Production URL**: [https://qms.sharpfloornc.com](https://qms.sharpfloornc.com)
+
+This application is automatically deployed to GitHub Pages with custom domain support and Angular routing compatibility.
+
+## ⭐ Features
+
+### 📋 Inspection Modules
+- **In-Process Inspection (IPI)** - Modular sub-components for production quality checks
+- **Final Inspection** - Multi-tab approval workflow with packaging requirements  
+- **Incoming Material Inspection** - Supplier quality verification and receipt inspection
+
+### 👥 User Management
+- **User & Permission Settings** - Complete role-based access control
+- **Activity Logging** - Comprehensive audit trail
+- **System Settings** - Security, notifications, and maintenance
+
+### 📊 Quality Processes
+- **Document Control** - Version management and approval workflows
+- **Non-Conformance Reports (NCR)** - Issue tracking and resolution
+- **Corrective Actions (CAPA)** - Systematic improvement processes
+- **Training & Certifications** - Personnel qualification management
+
+## 🚀 Quick Deployment
+
+```bash
+# Deploy to GitHub Pages
+npm run deploy:gh-pages
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment instructions.
 
 ## Development server
 
