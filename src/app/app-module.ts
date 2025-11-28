@@ -15,6 +15,7 @@ import { TrainingComponent } from './components/training/training.component';
 import { CapaComponent } from './components/capa/capa.component';
 import { MrbComponent } from './components/mrb/mrb.component';
 import { FaiComponent } from './components/fai/fai.component';
+import { IpiComponent } from './components/ipi/ipi.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FaiComponent } from './components/fai/fai.component';
     TrainingComponent,
     CapaComponent,
     MrbComponent,
-    FaiComponent
+    FaiComponent,
+    IpiComponent
   ],
   imports: [
     BrowserModule,

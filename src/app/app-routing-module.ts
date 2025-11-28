@@ -9,6 +9,7 @@ import { TrainingComponent } from './components/training/training.component';
 import { CapaComponent } from './components/capa/capa.component';
 import { MrbComponent } from './components/mrb/mrb.component';
 import { FaiComponent } from './components/fai/fai.component';
+import { IpiComponent } from './components/ipi/ipi.component';
 
 const routes: Routes = [
   { path: '', component: RootComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'capa', component: CapaComponent },
   { path: 'mrb', component: MrbComponent },
   { path: 'fai', component: FaiComponent },
+  { path: 'ipi', component: IpiComponent },
   { path: '**', redirectTo: '' }
 ];
 
