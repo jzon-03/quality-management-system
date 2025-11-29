@@ -18,7 +18,9 @@
          *ngFor="let item of qmsMenu" 
          [routerLink]="item.route"
          routerLinkActive="active-menu-item"
-         (click)="onMenuItemClick()">
+         (click)="onMenuItemClick()"
+         [matTooltip]="item.name"
+         matTooltipShowDelay="500">
         <mat-icon>{{ item.icon }}</mat-icon>
         <span>{{ item.name }}</span>
       </a>
